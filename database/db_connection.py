@@ -12,17 +12,31 @@ load_dotenv()
 class DatabaseConnection:
     def __init__(self):
         self.connection = None
-        self.config = {
-            'host': os.getenv('DB_HOST'),
-            'database': os.getenv('DB_NAME'),
-            'user': os.getenv('DB_USER'),
-            'password': os.getenv('DB_PASSWORD'),
-            'port': int(os.getenv('DB_PORT', 3306)),
-            'connection_timeout': 30,
-            'connect_timeout': 30,
-            'use_pure': True,
-            'buffered': True
-        }
+        try:
+            self.config = {
+                'host': st.secrets.get("DB_HOST", os.getenv('DB_HOST')),
+                'database': st.secrets.get("DB_NAME", os.getenv('DB_NAME')),
+                'user': st.secrets.get("DB_USER", os.getenv('DB_USER')),
+                'password': st.secrets.get("DB_PASSWORD", os.getenv('DB_PASSWORD')),
+                'port': int(st.secrets.get("DB_PORT", os.getenv('DB_PORT', 3306))),
+                'connection_timeout': 30,
+                'connect_timeout': 30,
+                'use_pure': True,
+                'buffered': True
+            }
+        except:
+            # Fallback to env vars if secrets not available
+            self.config = {
+                'host': os.getenv('DB_HOST'),
+                'database': os.getenv('DB_NAME'),
+                'user': os.getenv('DB_USER'),
+                'password': os.getenv('DB_PASSWORD'),
+                'port': int(os.getenv('DB_PORT', 3306)),
+                'connection_timeout': 30,
+                'connect_timeout': 30,
+                'use_pure': True,
+                'buffered': True
+            }
         self.current_company_id = None
         
         # Validate required config
