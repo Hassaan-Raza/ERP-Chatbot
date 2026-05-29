@@ -1,7 +1,8 @@
 import mysql.connector
 from mysql.connector import Error
 import pandas as pd
-
+import os
+from dotenv import load_dotenv
 
 def test_complete_setup():
     print("🔍 Testing Complete ERP Chatbot Setup...")
